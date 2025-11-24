@@ -17,6 +17,7 @@ const ReservaForm = ({ alquiler, onReservaExitosa }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [disponible, setDisponible] = useState(null);
+    const [verificando, setVerificando] = useState(false);
 
     const handleChange = (e) => {
         setFormData({
@@ -30,6 +31,7 @@ const ReservaForm = ({ alquiler, onReservaExitosa }) => {
             return;
         }
 
+        setVerificando(true);
         try {
             const response = await apiClient.post('/reservas/disponibilidad', {
                 alquiler_id: formData.alquiler_id,
@@ -44,7 +46,10 @@ const ReservaForm = ({ alquiler, onReservaExitosa }) => {
                 setError('');
             }
         } catch (err) {
+            console.error('Error al verificar disponibilidad:', err);
             setError('Error al verificar disponibilidad');
+        } finally {
+            setVerificando(false);
         }
     };
 
@@ -58,11 +63,10 @@ const ReservaForm = ({ alquiler, onReservaExitosa }) => {
             
             if (response.success) {
                 onReservaExitosa(response.data);
-            } else {
-                setError(response.error);
             }
         } catch (err) {
-            setError('Error al crear la reserva');
+            console.error('Error al crear reserva:', err);
+            setError(err.message || 'Error al crear la reserva');
         } finally {
             setLoading(false);
         }
@@ -150,7 +154,7 @@ const ReservaForm = ({ alquiler, onReservaExitosa }) => {
                             onChange={handleChange}
                             onBlur={verificarDisponibilidad}
                             required
-                            min={formData.fecha_entrada}
+                            min={formData.fecha_entrada || new Date().toISOString().split('T')[0]}
                             className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
                         />
                     </div>
@@ -164,10 +168,17 @@ const ReservaForm = ({ alquiler, onReservaExitosa }) => {
                         onChange={handleChange}
                         rows="3"
                         className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
+                        placeholder="Dejanos saber si tenés algún requerimiento especial..."
                     ></textarea>
                 </div>
 
-                {disponible === true && (
+                {verificando && (
+                    <div className="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg">
+                        ⏳ Verificando disponibilidad...
+                    </div>
+                )}
+
+                {disponible === true && !verificando && (
                     <div className="bg-green-100 text-green-800 px-4 py-2 rounded-lg">
                         ✓ Fechas disponibles
                     </div>
@@ -181,11 +192,15 @@ const ReservaForm = ({ alquiler, onReservaExitosa }) => {
 
                 <button
                     type="submit"
-                    disabled={loading || disponible === false}
-                    className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 disabled:bg-gray-400 transition duration-200"
+                    disabled={loading || disponible === false || verificando}
+                    className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition duration-200"
                 >
                     {loading ? 'Procesando...' : 'Confirmar Reserva'}
                 </button>
+
+                <p className="text-sm text-gray-500 text-center">
+                    Al confirmar, recibirás un email con los detalles de tu reserva
+                </p>
             </form>
         </div>
     );

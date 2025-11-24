@@ -38,7 +38,7 @@ const Turismo = () => {
     const [lugarSeleccionado, setLugarSeleccionado] = useState(null);
 
     // Centro del mapa (Balcozna, Catamarca)
-    const centro = [-28.6789, -65.7123];
+    const centro = [-27.864023893909792, -65.72607652939269];
 
     useEffect(() => {
         cargarLugares();

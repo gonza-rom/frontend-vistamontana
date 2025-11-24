@@ -80,7 +80,7 @@ const Contacto = () => {
                                 <div>
                                     <h3 className="font-bold text-lg mb-1">Teléfono</h3>
                                     <p className="text-gray-600">
-                                        +54 9 XXX XXX-XXXX
+                                        +54 9 383 494-6767
                                     </p>
                                 </div>
                             </div>
@@ -111,7 +111,7 @@ const Contacto = () => {
                             <h3 className="font-bold text-lg mb-4">Nuestra Ubicación</h3>
                             <div className="rounded-lg overflow-hidden shadow-lg h-64">
                                 <iframe 
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14151.234567890123!2d-65.7123!3d-28.6789!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjjCsDQwJzQ0LjAiUyA2NcKwNDInNDQuMyJX!5e0!3m2!1ses!2sar!4v1234567890123"
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d9912.586978179852!2d-65.73406123891783!3d-27.86531221913398!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9423f9e4c16cb9d3%3A0x701876b42168291d!2sHospedaje%20Vista%20Monta%C3%B1a!5e0!3m2!1ses-419!2sar!4v1763955128449!5m2!1ses-419!2sar"
                                     width="100%" 
                                     height="100%" 
                                     style={{ border: 0 }} 

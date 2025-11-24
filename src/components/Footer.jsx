@@ -15,7 +15,7 @@ const Footer = () => {
                     <div>
                         <h3 className="text-xl font-bold mb-4">Contacto</h3>
                         <p className="text-gray-400">📍 Balcozna, Catamarca</p>
-                        <p className="text-gray-400">📞 +54 9 XXX XXX-XXXX</p>
+                        <p className="text-gray-400">📞 +54 9 3834 94-6767</p>
                         <p className="text-gray-400">✉️ info@vistamontana.com</p>
                     </div>
                     <div>
