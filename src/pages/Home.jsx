@@ -23,13 +23,14 @@ const Home = () => {
                         <div className="space-x-4">
                             <Link 
                                 to="/alquileres" 
-                                className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg inline-block transition"
+                                className="text-white px-8 py-3 rounded-lg inline-block transition hover:opacity-90"
+                                style={{backgroundColor: '#656B5B'}}
                             >
                                 Reservar Ahora
                             </Link>
                             <Link 
                                 to="/turismo" 
-                                className="bg-white hover:bg-gray-100 text-green-700 px-8 py-3 rounded-lg inline-block transition"
+                                className="bg-white text-gray-800 px-8 py-3 rounded-lg inline-block transition hover:bg-gray-100"
                             >
                                 Lugares para Visitar
                             </Link>
@@ -88,7 +89,8 @@ const Home = () => {
                             </p>
                             <Link 
                                 to="/alquileres" 
-                                className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg inline-block transition"
+                                className="text-white px-6 py-3 rounded-lg inline-block transition hover:opacity-90"
+                                style={{backgroundColor: '#656B5B'}}
                             >
                                 Ver Opciones de Alojamiento
                             </Link>

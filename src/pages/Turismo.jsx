@@ -86,7 +86,7 @@ const Turismo = () => {
     return (
         <div>
             {/* Header */}
-            <div className="bg-green-700 text-white py-16">
+            <div className="text-white py-16" style={{backgroundColor: '#656B5B'}}>
                 <div className="container mx-auto px-4 text-center">
                     <h1 className="text-5xl font-bold mb-4">
                         Lugares para Visitar

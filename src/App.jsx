@@ -3,6 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import WhatsAppButton from './components/WhatsAppButton';
 import Home from './pages/Home';
 import Alquileres from './pages/Alquileres';
 import AlquilerDetalle from './pages/AlquilerDetalle';
@@ -26,6 +27,7 @@ function App() {
                     </Routes>
                 </main>
                 <Footer />
+                <WhatsAppButton />
             </div>
         </Router>
     );
