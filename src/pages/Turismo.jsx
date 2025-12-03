@@ -199,7 +199,7 @@ const Turismo = () => {
                                 <div className="h-56 bg-gray-300">
                                     {lugar.imagen ? (
                                         <img 
-                                            src={`/images/${lugar.imagen}`}
+                                            src={`/${lugar.imagen}`}
                                             alt={lugar.nombre}
                                             className="w-full h-full object-cover"
                                         />

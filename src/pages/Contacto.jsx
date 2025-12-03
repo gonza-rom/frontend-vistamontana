@@ -95,10 +95,10 @@ const Contacto = () => {
                                 <div>
                                     <h3 className="font-bold text-lg mb-1">Email</h3>
                                     <a 
-                                        href="mailto:info@vistamontana.com"
+                                        href="mailto:hospedajevistamontaña@gmail.com"
                                         className="text-green-600 hover:text-green-700"
                                     >
-                                        info@vistamontana.com
+                                        hospedajevistamontaña@gmail.com
                                     </a>
                                 </div>
                             </div>

@@ -13,7 +13,7 @@ const ReservaForm = ({ alquiler, onReservaExitosa }) => {
         cantidad_personas: 1,
         notas: ''
     });
-    
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [disponible, setDisponible] = useState(null);
@@ -60,7 +60,7 @@ const ReservaForm = ({ alquiler, onReservaExitosa }) => {
 
         try {
             const response = await apiClient.post('/reservas', formData);
-            
+
             if (response.success) {
                 onReservaExitosa(response.data);
             }
@@ -73,50 +73,62 @@ const ReservaForm = ({ alquiler, onReservaExitosa }) => {
     };
 
     return (
-        <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-2xl font-bold mb-6">Hacer una Reserva</h2>
-            
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
+            <h2 className="text-3xl font-bold mb-8 text-gradient-sierra flex items-center">
+                <span className="text-4xl mr-3">📅</span>
+                Hacer una Reserva
+            </h2>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 gap-6">
                     <div>
-                        <label className="block text-sm font-medium mb-2">Nombre completo *</label>
+                        <label className="block text-sm font-semibold mb-2 text-gray-700">
+                            Nombre completo *
+                        </label>
                         <input
                             type="text"
                             name="nombre_cliente"
                             value={formData.nombre_cliente}
                             onChange={handleChange}
                             required
-                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
+                            placeholder="Juan Pérez"
                         />
                     </div>
-                    
+
                     <div>
-                        <label className="block text-sm font-medium mb-2">Email *</label>
+                        <label className="block text-sm font-semibold mb-2 text-gray-700">
+                            Email *
+                        </label>
                         <input
                             type="email"
                             name="email_cliente"
                             value={formData.email_cliente}
                             onChange={handleChange}
                             required
-                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
+                            placeholder="juan@ejemplo.com"
                         />
                     </div>
-                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label className="block text-sm font-medium mb-2">Teléfono</label>
+                        <label className="block text-sm font-semibold mb-2 text-gray-700">
+                            Teléfono
+                        </label>
                         <input
                             type="tel"
                             name="telefono_cliente"
                             value={formData.telefono_cliente}
                             onChange={handleChange}
-                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
+                            placeholder="+54 9 11 1234-5678"
                         />
                     </div>
-                    
+
                     <div>
-                        <label className="block text-sm font-medium mb-2">Cantidad de personas *</label>
+                        <label className="block text-sm font-semibold mb-2 text-gray-700">
+                            Cantidad de personas *
+                        </label>
                         <input
                             type="number"
                             name="cantidad_personas"
@@ -125,14 +137,19 @@ const ReservaForm = ({ alquiler, onReservaExitosa }) => {
                             min="1"
                             max={alquiler.capacidad_maxima}
                             required
-                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
                         />
+                        <p className="text-xs text-gray-500 mt-1">
+                            Máximo: {alquiler.capacidad_maxima} personas
+                        </p>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label className="block text-sm font-medium mb-2">Fecha de entrada *</label>
+                        <label className="block text-sm font-semibold mb-2 text-gray-700">
+                            Fecha de entrada *
+                        </label>
                         <input
                             type="date"
                             name="fecha_entrada"
@@ -141,12 +158,14 @@ const ReservaForm = ({ alquiler, onReservaExitosa }) => {
                             onBlur={verificarDisponibilidad}
                             required
                             min={new Date().toISOString().split('T')[0]}
-                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
                         />
                     </div>
-                    
+
                     <div>
-                        <label className="block text-sm font-medium mb-2">Fecha de salida *</label>
+                        <label className="block text-sm font-semibold mb-2 text-gray-700">
+                            Fecha de salida *
+                        </label>
                         <input
                             type="date"
                             name="fecha_salida"
@@ -155,50 +174,71 @@ const ReservaForm = ({ alquiler, onReservaExitosa }) => {
                             onBlur={verificarDisponibilidad}
                             required
                             min={formData.fecha_entrada || new Date().toISOString().split('T')[0]}
-                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
                         />
                     </div>
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium mb-2">Comentarios adicionales</label>
+                    <label className="block text-sm font-semibold mb-2 text-gray-700">
+                        Comentarios adicionales
+                    </label>
                     <textarea
                         name="notas"
                         value={formData.notas}
                         onChange={handleChange}
-                        rows="3"
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500"
+                        rows="4"
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300 resize-none"
                         placeholder="Dejanos saber si tenés algún requerimiento especial..."
                     ></textarea>
                 </div>
 
                 {verificando && (
-                    <div className="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg">
-                        ⏳ Verificando disponibilidad...
+                    <div className="bg-gradient-to-r from-blue-50 to-blue-100 border-2 border-blue-200 text-blue-800 px-5 py-4 rounded-xl flex items-center animate-pulse">
+                        <div className="animate-spin rounded-full h-5 w-5 border-2 border-blue-600 border-t-transparent mr-3"></div>
+                        <span className="font-medium">Verificando disponibilidad...</span>
                     </div>
                 )}
 
                 {disponible === true && !verificando && (
-                    <div className="bg-green-100 text-green-800 px-4 py-2 rounded-lg">
-                        ✓ Fechas disponibles
+                    <div className="bg-gradient-to-r from-green-50 to-green-100 border-2 border-green-200 text-green-800 px-5 py-4 rounded-xl flex items-center animate-slide-up">
+                        <svg className="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="font-medium">¡Fechas disponibles!</span>
                     </div>
                 )}
 
                 {error && (
-                    <div className="bg-red-100 text-red-800 px-4 py-2 rounded-lg">
-                        {error}
+                    <div className="bg-gradient-to-r from-red-50 to-red-100 border-2 border-red-200 text-red-800 px-5 py-4 rounded-xl flex items-center animate-slide-up">
+                        <svg className="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span className="font-medium">{error}</span>
                     </div>
                 )}
 
                 <button
                     type="submit"
                     disabled={loading || disponible === false || verificando}
-                    className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition duration-200"
+                    className="w-full gradient-sierra text-white py-4 rounded-xl font-bold text-lg transition-all duration-300 hover:scale-105 hover-glow disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center"
                 >
-                    {loading ? 'Procesando...' : 'Confirmar Reserva'}
+                    {loading ? (
+                        <>
+                            <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-3"></div>
+                            Procesando...
+                        </>
+                    ) : (
+                        <>
+                            <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                            Confirmar Reserva
+                        </>
+                    )}
                 </button>
 
-                <p className="text-sm text-gray-500 text-center">
+                <p className="text-sm text-gray-500 text-center leading-relaxed">
                     Al confirmar, recibirás un email con los detalles de tu reserva
                 </p>
             </form>

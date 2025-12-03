@@ -9,6 +9,7 @@ import Alquileres from './pages/Alquileres';
 import AlquilerDetalle from './pages/AlquilerDetalle';
 import Turismo from './pages/Turismo';
 import Contacto from './pages/Contacto';
+import Galeria from './pages/Galeria';
 import AdminPanel from './pages/AdminPanel';
 
 function App() {
@@ -16,12 +17,13 @@ function App() {
         <Router>
             <div className="min-h-screen flex flex-col">
                 <Navbar />
-                <main className="flex-grow">
+                <main className="flex-grow pt-20">
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/alquileres" element={<Alquileres />} />
                         <Route path="/alquileres/:id" element={<AlquilerDetalle />} />
                         <Route path="/turismo" element={<Turismo />} />
+                        <Route path="/galeria" element={<Galeria />} />
                         <Route path="/contacto" element={<Contacto />} />
                         <Route path="/admin" element={<AdminPanel />} />
                     </Routes>
