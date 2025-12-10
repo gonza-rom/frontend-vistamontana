@@ -133,7 +133,7 @@ const AlquilerDetalle = () => {
     }
 
     const fotos = alquiler.tipo === 'casa_completa'
-        ? ['quincho-2.jpg', 'patio-5.jpg', 'patio-6.jpg', 'habitacion-1.jpg', 'habitacion-2.jpg', 'habitacion-3.jpg']
+        ? ['quincho-2.jpg', 'patio-5.webp', 'patio-6.jpg', 'habitacion-1.jpg', 'habitacion-2.jpg', 'habitacion-3.jpg']
         : (alquiler.habitacion_fotos || []);
 
     return (
@@ -175,7 +175,7 @@ const AlquilerDetalle = () => {
                                     <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
                                         {fotos.map((foto, index) => (
                                             <button key={index} onClick={() => setImagenSeleccionada(index)} className={`relative rounded-xl overflow-hidden transition-all duration-300 hover:scale-105 ${imagenSeleccionada === index ? 'ring-4 ring-green-500 shadow-lg' : 'opacity-70 hover:opacity-100'}`}>
-                                                <img src={`/${foto}`} alt={`Miniatura ${index + 1}`} className="w-full h-20 object-cover" onError={(e) => e.target.style.display = 'none'} />
+                                                <img src={`/${foto}`} alt={`Miniatura ${index + 1}`} className="w-full h-20 object-cover" loading="lazy" onError={(e) => e.target.style.display = 'none'} />
                                             </button>
                                         ))}
                                     </div>
@@ -194,10 +194,16 @@ const AlquilerDetalle = () => {
                                 <div className="space-y-6">
                                     {/* Video */}
                                     <div className="mb-6">
-                                        <video controls className="w-full rounded-xl shadow-lg" poster="/patio-6.jpg">
-                                            <source src="/casa-completa-vid.mp4" type="video/mp4" />
-                                            Tu navegador no soporta videos HTML5.
-                                        </video>
+                                        <div className="relative rounded-2xl shadow-2xl overflow-hidden aspect-[9/16]">
+                                            <iframe
+                                                className="absolute top-0 left-0 w-full h-full"
+                                                src="https://www.youtube.com/embed/y8SgfCrdxME"
+                                                title="Hospedaje Vista Montaña"
+                                                frameBorder="0"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allowFullScreen
+                                            ></iframe>
+                                        </div>
                                     </div>
 
                                     <div className="border-l-4 border-purple-500 pl-4">

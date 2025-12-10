@@ -6,10 +6,10 @@ const Home = () => {
 
     // Imágenes para el carrusel del hero
     const heroImages = [
-        { src: '/patio-5.jpg', alt: 'Vista del patio' },
+        { src: '/patio-5.webp', alt: 'Vista del patio' },
         { src: '/montaña-1.jpg', alt: 'Vista de las montañas' },
-        { src: '/quincho.jpg', alt: 'Quincho del hospedaje' },
-        { src: '/patio-1.jpg', alt: 'Patio principal' },
+        { src: '/quincho.webp', alt: 'Quincho del hospedaje' },
+        { src: '/patio-1.webp', alt: 'Patio principal' },
         { src: '/vista-exterior.jpg', alt: 'Vista exterior' }
     ];
 
@@ -235,14 +235,16 @@ const Home = () => {
                         <div className="reveal stagger-1">
                             <div className="relative group">
                                 <div className="absolute -inset-4 bg-gradient-to-r from-green-400 to-blue-500 rounded-3xl opacity-20 group-hover:opacity-30 blur-xl transition-opacity duration-300"></div>
-                                <video
-                                    controls
-                                    className="relative rounded-2xl shadow-2xl w-full"
-                                    poster="/patio-6.jpg"
-                                >
-                                    <source src="/casa-completa-vid.mp4" type="video/mp4" />
-                                    Tu navegador no soporta videos HTML5.
-                                </video>
+                                <div className="relative rounded-2xl shadow-2xl overflow-hidden aspect-[9/16]">
+                                    <iframe
+                                        className="absolute top-0 left-0 w-full h-full"
+                                        src="https://www.youtube.com/embed/y8SgfCrdxME"
+                                        title="Hospedaje Vista Montaña"
+                                        frameBorder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    ></iframe>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -271,7 +273,7 @@ const Home = () => {
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                         {[
-                            { src: '/patio-1.jpg', alt: 'Patio principal' },
+                            { src: '/patio-1.webp', alt: 'Patio principal' },
                             { src: '/patio-2.jpg', alt: 'Patio exterior' },
                             { src: '/habitacion-2.jpg', alt: 'Habitación confortable' },
                             { src: '/quincho-2.jpg', alt: 'Quincho' }

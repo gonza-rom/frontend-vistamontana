@@ -1,6 +1,6 @@
 // src/components/ReservaForm.jsx
-import React, { useState } from 'react';
-import { apiClient } from '../config/api';
+import React, { useState, useEffect } from 'react';
+import { apiClient, paymentAPI } from '../config/api';
 
 const ReservaForm = ({ alquiler, onReservaExitosa }) => {
     const [formData, setFormData] = useState({
@@ -18,12 +18,59 @@ const ReservaForm = ({ alquiler, onReservaExitosa }) => {
     const [error, setError] = useState('');
     const [disponible, setDisponible] = useState(null);
     const [verificando, setVerificando] = useState(false);
+    const [comprobante, setComprobante] = useState(null);
+    const [precioTotal, setPrecioTotal] = useState(0);
+    const [diasEstadia, setDiasEstadia] = useState(0);
+
+    // Calcular precio total cuando cambian las fechas o personas
+    useEffect(() => {
+        console.log('Alquiler data:', alquiler); // Debug
+        console.log('Precio por noche:', alquiler.precio_por_noche); // Debug
+
+        if (formData.fecha_entrada && formData.fecha_salida) {
+            const entrada = new Date(formData.fecha_entrada);
+            const salida = new Date(formData.fecha_salida);
+            const dias = Math.ceil((salida - entrada) / (1000 * 60 * 60 * 24));
+
+            if (dias > 0) {
+                setDiasEstadia(dias);
+                // Usar precio_por_noche o precio como fallback
+                const precioPorNoche = alquiler.precio_por_noche || alquiler.precio || 0;
+                const total = precioPorNoche * formData.cantidad_personas * dias;
+                console.log('Días:', dias, 'Precio por noche:', precioPorNoche, 'Total:', total); // Debug
+                setPrecioTotal(total);
+            }
+        }
+    }, [formData.fecha_entrada, formData.fecha_salida, formData.cantidad_personas, alquiler]);
 
     const handleChange = (e) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
         });
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            // Validar tamaño (máx 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                setError('El archivo no debe superar los 5MB');
+                e.target.value = '';
+                return;
+            }
+
+            // Validar tipo
+            const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
+            if (!validTypes.includes(file.type)) {
+                setError('Solo se permiten archivos JPG, PNG o PDF');
+                e.target.value = '';
+                return;
+            }
+
+            setComprobante(file);
+            setError('');
+        }
     };
 
     const verificarDisponibilidad = async () => {
@@ -58,11 +105,28 @@ const ReservaForm = ({ alquiler, onReservaExitosa }) => {
         setLoading(true);
         setError('');
 
+        // Validar que se haya subido el comprobante
+        if (!comprobante) {
+            setError('Debes subir el comprobante de pago');
+            setLoading(false);
+            return;
+        }
+
         try {
+            // 1. Crear la reserva
             const response = await apiClient.post('/reservas', formData);
 
             if (response.success) {
-                onReservaExitosa(response.data);
+                const reservaId = response.data.id;
+
+                // 2. Subir el comprobante
+                try {
+                    await paymentAPI.uploadReceipt(reservaId, comprobante);
+                    onReservaExitosa(response.data);
+                } catch (uploadErr) {
+                    console.error('Error al subir comprobante:', uploadErr);
+                    setError('Reserva creada pero hubo un error al subir el comprobante. Por favor contactanos.');
+                }
             }
         } catch (err) {
             console.error('Error al crear reserva:', err);
@@ -71,6 +135,8 @@ const ReservaForm = ({ alquiler, onReservaExitosa }) => {
             setLoading(false);
         }
     };
+
+    const pago50 = precioTotal * 0.5;
 
     return (
         <div className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
@@ -193,6 +259,70 @@ const ReservaForm = ({ alquiler, onReservaExitosa }) => {
                     ></textarea>
                 </div>
 
+                {/* Sección de Pago */}
+                {precioTotal > 0 && (
+                    <div className="bg-gradient-to-br from-green-50 to-blue-50 p-6 rounded-2xl border-2 border-green-200">
+                        <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                            <span className="text-3xl mr-2">💰</span>
+                            Información de Pago
+                        </h3>
+
+                        <div className="bg-white p-4 rounded-xl mb-4">
+                            <div className="flex justify-between items-center mb-2">
+                                <span className="text-gray-600">Estadía:</span>
+                                <span className="font-semibold">{diasEstadia} {diasEstadia === 1 ? 'noche' : 'noches'}</span>
+                            </div>
+                            <div className="flex justify-between items-center mb-2">
+                                <span className="text-gray-600">Precio total:</span>
+                                <span className="font-semibold">${precioTotal.toLocaleString()}</span>
+                            </div>
+                            <div className="flex justify-between items-center pt-2 border-t-2 border-gray-200">
+                                <span className="text-lg font-bold text-green-600">Seña (50%):</span>
+                                <span className="text-2xl font-bold text-green-600">${pago50.toLocaleString()}</span>
+                            </div>
+                        </div>
+
+                        <div className="bg-blue-50 p-4 rounded-xl mb-4 border border-blue-200">
+                            <p className="font-semibold text-gray-900 mb-3">Datos para transferencia:</p>
+                            <div className="space-y-2 text-sm">
+                                <div className="flex justify-between">
+                                    <span className="text-gray-600">CBU:</span>
+                                    <span className="font-mono font-semibold">4530000800017862828905</span>
+                                </div>
+                                <div className="flex justify-between">
+                                    <span className="text-gray-600">Alias:</span>
+                                    <span className="font-semibold">gonzarom</span>
+                                </div>
+                                <div className="flex justify-between">
+                                    <span className="text-gray-600">Banco:</span>
+                                    <span className="font-semibold">Naranja X</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-semibold mb-2 text-gray-700">
+                                Comprobante de pago * (JPG, PNG o PDF - Máx 5MB)
+                            </label>
+                            <input
+                                type="file"
+                                accept=".jpg,.jpeg,.png,.pdf"
+                                onChange={handleFileChange}
+                                required
+                                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+                            />
+                            {comprobante && (
+                                <p className="text-sm text-green-600 mt-2 flex items-center">
+                                    <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                    </svg>
+                                    Archivo seleccionado: {comprobante.name}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                )}
+
                 {verificando && (
                     <div className="bg-gradient-to-r from-blue-50 to-blue-100 border-2 border-blue-200 text-blue-800 px-5 py-4 rounded-xl flex items-center animate-pulse">
                         <div className="animate-spin rounded-full h-5 w-5 border-2 border-blue-600 border-t-transparent mr-3"></div>
@@ -239,7 +369,7 @@ const ReservaForm = ({ alquiler, onReservaExitosa }) => {
                 </button>
 
                 <p className="text-sm text-gray-500 text-center leading-relaxed">
-                    Al confirmar, recibirás un email con los detalles de tu reserva
+                    Al confirmar, recibirás un email con los detalles de tu reserva. El pago será verificado por el administrador.
                 </p>
             </form>
         </div>

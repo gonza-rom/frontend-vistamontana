@@ -126,6 +126,7 @@ const Alquileres = () => {
                                         src="/patio-6.jpg"
                                         alt={alquiler.nombre}
                                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                        loading="lazy"
                                         onError={(e) => {
                                             e.target.style.display = 'none';
                                             e.target.parentElement.innerHTML = `
@@ -140,6 +141,7 @@ const Alquileres = () => {
                                         src={`/${alquiler.habitacion_fotos[0]}`}
                                         alt={alquiler.nombre}
                                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                        loading="lazy"
                                         onError={(e) => {
                                             e.target.style.display = 'none';
                                             e.target.parentElement.innerHTML = `

@@ -1,12 +1,14 @@
 // src/components/Navbar.jsx
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import DarkModeToggle from './DarkModeToggle';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const location = useLocation();
+    const { isAuthenticated } = useAuth();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -22,8 +24,8 @@ const Navbar = () => {
     return (
         <nav
             className={`fixed w-full top-0 z-50 transition-all duration-300 ${scrolled
-                    ? 'glass-dark shadow-xl'
-                    : 'bg-transparent'
+                ? 'glass-dark shadow-xl'
+                : 'bg-transparent'
                 }`}
             style={{
                 backgroundColor: scrolled ? 'rgba(45, 95, 63, 0.95)' : 'rgba(45, 95, 63, 0.7)',
@@ -75,6 +77,23 @@ const Navbar = () => {
                             <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-white transform origin-left transition-transform duration-300 ${isActive('/contacto') ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
                                 }`}></span>
                         </Link>
+
+                        {/* Admin/Login Button */}
+                        <Link
+                            to={isAuthenticated ? "/admin" : "/login"}
+                            className="text-white font-medium transition-all duration-300 hover:bg-white hover:bg-opacity-20 px-3 py-2 rounded-lg flex items-center gap-2"
+                            title={isAuthenticated ? "Panel de Admin" : "Iniciar Sesión"}
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                {isAuthenticated ? (
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                ) : (
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                )}
+                            </svg>
+                            {isAuthenticated ? "Admin" : ""}
+                        </Link>
+
                         <DarkModeToggle />
                     </div>
 
@@ -103,8 +122,8 @@ const Navbar = () => {
                         <Link
                             to="/"
                             className={`text-white py-2 px-4 rounded-lg transition-all duration-300 ${isActive('/')
-                                    ? 'bg-white bg-opacity-20'
-                                    : 'hover:bg-white hover:bg-opacity-10'
+                                ? 'bg-black bg-opacity-20'
+                                : 'hover:bg-white hover:bg-opacity-10'
                                 }`}
                             onClick={() => setIsOpen(false)}
                         >
@@ -113,8 +132,8 @@ const Navbar = () => {
                         <Link
                             to="/alquileres"
                             className={`text-white py-2 px-4 rounded-lg transition-all duration-300 ${isActive('/alquileres')
-                                    ? 'bg-white bg-opacity-20'
-                                    : 'hover:bg-white hover:bg-opacity-10'
+                                ? 'bg-black bg-opacity-20'
+                                : 'hover:bg-white hover:bg-opacity-10'
                                 }`}
                             onClick={() => setIsOpen(false)}
                         >
@@ -123,8 +142,8 @@ const Navbar = () => {
                         <Link
                             to="/turismo"
                             className={`text-white py-2 px-4 rounded-lg transition-all duration-300 ${isActive('/turismo')
-                                    ? 'bg-white bg-opacity-20'
-                                    : 'hover:bg-white hover:bg-opacity-10'
+                                ? 'bg-black bg-opacity-20'
+                                : 'hover:bg-white hover:bg-opacity-10'
                                 }`}
                             onClick={() => setIsOpen(false)}
                         >
@@ -133,8 +152,8 @@ const Navbar = () => {
                         <Link
                             to="/galeria"
                             className={`text-white py-2 px-4 rounded-lg transition-all duration-300 ${isActive('/galeria')
-                                    ? 'bg-white bg-opacity-20'
-                                    : 'hover:bg-white hover:bg-opacity-10'
+                                ? 'bg-black bg-opacity-20'
+                                : 'hover:bg-white hover:bg-opacity-10'
                                 }`}
                             onClick={() => setIsOpen(false)}
                         >
@@ -143,12 +162,31 @@ const Navbar = () => {
                         <Link
                             to="/contacto"
                             className={`text-white py-2 px-4 rounded-lg transition-all duration-300 ${isActive('/contacto')
-                                    ? 'bg-white bg-opacity-20'
-                                    : 'hover:bg-white hover:bg-opacity-10'
+                                ? 'bg-black bg-opacity-20'
+                                : 'hover:bg-white hover:bg-opacity-10'
                                 }`}
                             onClick={() => setIsOpen(false)}
                         >
                             Contacto
+                        </Link>
+
+                        {/* Admin/Login Button Mobile */}
+                        <Link
+                            to={isAuthenticated ? "/admin" : "/login"}
+                            className={`text-white py-2 px-4 rounded-lg transition-all duration-300 flex items-center gap-2 ${isActive(isAuthenticated ? '/admin' : '/login')
+                                ? 'bg-black bg-opacity-20'
+                                : 'hover:bg-white hover:bg-opacity-10'
+                                }`}
+                            onClick={() => setIsOpen(false)}
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                {isAuthenticated ? (
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                ) : (
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                )}
+                            </svg>
+                            {isAuthenticated ? "Panel Admin" : "Iniciar Sesión"}
                         </Link>
                     </div>
                 </div>
